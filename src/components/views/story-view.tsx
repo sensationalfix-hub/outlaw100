@@ -79,11 +79,11 @@ export function StoryView({
             return <section key={group.label} id={chapterId(originalIndex)} className="story-chapter-section">
               <header><div><small>CAPÍTULO</small><h2>{group.label}</h2></div><span>{group.missions.length} misiones</span></header>
               <div className="story-mission-grid">
-                {group.missions.map((mission, missionIndex) => {
+                {group.missions.map((mission) => {
                   const isActive = active?.entity.id === mission.entity.id;
-                  const allDone = mission.totalCriteria > 0 && mission.completedCriteria === mission.totalCriteria;
+                  const allDone = mission.completed;
                   return <button key={mission.entity.id} className={`story-mission-card ${mission.hasGold ? 'gold-mission' : ''} ${isActive ? 'selected' : ''} ${allDone ? 'done' : ''}`} onClick={() => setSelectedId(mission.entity.id)}>
-                    <div className="story-mission-top"><span>{String(missionIndex + 1).padStart(2, '0')}</span><small>{mission.completedCriteria}/{mission.totalCriteria}</small></div>
+                    <div className="story-mission-top"><span>{String(mission.order).padStart(2, '0')}</span><small>{mission.completedCriteria}/{mission.totalCriteria}</small></div>
                     <h3>{catalog.translations?.[mission.entity.name] ?? mission.entity.name}</h3>
                     {catalog.translations?.[mission.entity.name] && <p>{mission.entity.name}</p>}
                     <footer>{mission.hasGold ? <span className="story-gold-badge">★ MEDALLA DE ORO · {mission.goldCompleted}/{mission.goldTotal}</span> : <span>{allDone ? 'COMPLETADA' : 'MISIÓN DE HISTORIA'}</span>}</footer>
