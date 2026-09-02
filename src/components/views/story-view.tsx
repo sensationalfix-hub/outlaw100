@@ -60,7 +60,7 @@ export function StoryView({
 
   return <section className="content-view story-view">
     <header className="view-heading story-heading">
-      <div><small>MISIONES</small><h1>Historia</h1><p>La campaña completa en orden narrativo, separada por capítulos. Las misiones con retos de medalla se identifican en oro.</p></div>
+      <div><small>MISIONES</small><h1>Historia</h1><p>La campaña completa en orden narrativo, separada por capítulos. Una misión se vuelve dorada cuando completas todos sus retos de medalla.</p></div>
       <span className="big-count">{allMissions.length}</span>
     </header>
 
@@ -82,11 +82,11 @@ export function StoryView({
                 {group.missions.map((mission) => {
                   const isActive = active?.entity.id === mission.entity.id;
                   const allDone = mission.completed;
-                  return <button key={mission.entity.id} className={`story-mission-card ${mission.hasGold ? 'gold-mission' : ''} ${isActive ? 'selected' : ''} ${allDone ? 'done' : ''}`} onClick={() => setSelectedId(mission.entity.id)}>
+                  return <button key={mission.entity.id} className={`story-mission-card ${mission.goldEarned ? 'gold-mission' : ''} ${isActive ? 'selected' : ''} ${allDone ? 'done' : ''}`} onClick={() => setSelectedId(mission.entity.id)}>
                     <div className="story-mission-top"><span>{String(mission.order).padStart(2, '0')}</span><small>{mission.completedCriteria}/{mission.totalCriteria}</small></div>
                     <h3>{catalog.translations?.[mission.entity.name] ?? mission.entity.name}</h3>
                     {catalog.translations?.[mission.entity.name] && <p>{mission.entity.name}</p>}
-                    <footer>{mission.hasGold ? <span className="story-gold-badge">★ MEDALLA DE ORO · {mission.goldCompleted}/{mission.goldTotal}</span> : <span>{allDone ? 'COMPLETADA' : 'MISIÓN DE HISTORIA'}</span>}</footer>
+                    <footer>{mission.hasGold ? (mission.goldEarned ? <span className="story-gold-badge">★ MEDALLA DE ORO · {mission.goldCompleted}/{mission.goldTotal}</span> : <span>☆ RETOS DE ORO · {mission.goldCompleted}/{mission.goldTotal}</span>) : <span>{allDone ? 'COMPLETADA' : 'MISIÓN DE HISTORIA'}</span>}</footer>
                   </button>;
                 })}
               </div>
@@ -96,7 +96,7 @@ export function StoryView({
         </div>
       </div>
 
-      <aside className={`detail-panel story-detail ${active?.hasGold ? 'has-gold' : ''}`}>
+      <aside className={`detail-panel story-detail ${active?.goldEarned ? 'has-gold' : ''}`}>
         {active ? <>
           {detail?.imageUrl && <img className="detail-hero-image" src={detail.imageUrl} alt={catalog.translations?.[active.entity.name] ?? active.entity.name} />}
           <small className="detail-kicker">{String(active.entity.metadata?.chapterLabel ?? 'Historia')}</small>
