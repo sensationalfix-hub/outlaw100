@@ -34,12 +34,38 @@ test('dashboard uses source-backed legacy gold objectives when story chapter pos
   assert.equal(model.goldObjectives[2].label, 'Termina con al menos un 80% de precisión');
 });
 
-test('dashboard keeps PDF milestone title when Spanish legacy alignment is ambiguous', () => {
-  const mixed = structuredClone(catalog);
+test('dashboard links chapter 2 story milestones to the legacy mission, completion check and gold objectives', () => {
+  const mixed = structuredClone(catalog) as CanonicalCatalog;
+  mixed.entities.push({
+    id: 'story-legacy:sociedad-educada-estilo-valentine',
+    type: 'story_mission',
+    name: 'Sociedad educada, estilo Valentine',
+    category: 'story_mission_legacy',
+    metadata: { chapterLabel: 'Capítulo 2 · Mirador de la Herradura', groupIndex: 0, missionIndex: 0 },
+  });
+  mixed.criteria.push(
+    { id: 'chapter2:complete', entityId: 'story-legacy:sociedad-educada-estilo-valentine', key: 'complete', label: 'Misión completada', criterionType: 'boolean' },
+    { id: 'chapter2:gold:1', entityId: 'story-legacy:sociedad-educada-estilo-valentine', key: 'gold-1', label: 'Devuelve el caballo perdido del carro a su dueño', criterionType: 'boolean' },
+    { id: 'chapter2:gold:2', entityId: 'story-legacy:sociedad-educada-estilo-valentine', key: 'gold-2', label: 'Encuentra a Karen en menos de 45 s', criterionType: 'boolean' },
+  );
   mixed.milestones = [{ id: 'm3', kind: 'story', chapter: 'chapter-2', title: 'Polite Society, Valentine Style', order: 10, sourcePage: 2, sourceReference: 'PDF p.2', missableRisk: false }];
-  const model = buildDashboardModel(mixed, mixed.milestones[0], progress);
-  assert.equal(model.displayTitle, 'Polite Society, Valentine Style');
-  assert.deepEqual(model.goldObjectives, []);
+  mixed.milestoneTasks = [{ id: 'chapter2:hito', milestoneId: 'm3', label: 'Completar: Polite Society, Valentine Style', order: 0 }];
+  const state: ProgressSnapshot = {
+    version: 1,
+    criteria: { 'chapter2:complete': 'completed', 'chapter2:gold:1': 'completed' },
+    tasks: {},
+    inventory: {},
+  };
+
+  const model = buildDashboardModel(mixed, mixed.milestones[0], state);
+  assert.equal(model.displayTitle, 'Sociedad educada, estilo Valentine');
+  assert.equal(model.legacyMission?.id, 'story-legacy:sociedad-educada-estilo-valentine');
+  assert.deepEqual(model.goldObjectives.map(({ label, done }) => [label, done]), [
+    ['Devuelve el caballo perdido del carro a su dueño', true],
+    ['Encuentra a Karen en menos de 45 s', false],
+  ]);
+  assert.equal(model.missionCompletion?.criterion.id, 'chapter2:complete');
+  assert.equal(model.missionCompletion?.done, true);
 });
 
 test('dashboard exposes pending earlier work, active requests, next route nodes and craftables ready by inventory', () => {
