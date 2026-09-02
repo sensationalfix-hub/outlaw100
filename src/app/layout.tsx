@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 import './dashboard-golden.css';
 import './rdr-font.css';
+import './dashboard-assets-hotfix.css';
 
 export const metadata: Metadata = {
   title: 'OUTLAW 100 · RDR2 Ultra Completionist',
