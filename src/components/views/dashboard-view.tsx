@@ -33,7 +33,8 @@ export function DashboardView({ catalog, milestone, onOpenRoute, onOpenEntity, o
   const milestoneDone = isMilestoneCompleted(milestone, catalog.milestoneTasks, progress.snapshot);
   const intel = milestone.metadata?.intel as { summary?: string } | undefined;
   const whyNow = String(milestone.metadata?.whyNow ?? intel?.summary ?? '');
-  const inferred = Boolean(milestone.metadata?.editorialInference ?? (milestone.availability as any)?.editorialInference);
+  const availability = milestone.availability && typeof milestone.availability === 'object' ? milestone.availability as Record<string, unknown> : undefined;
+  const inferred = Boolean(milestone.metadata?.editorialInference ?? availability?.editorialInference);
 
   async function setTask(task: CatalogMilestoneTask, completed: boolean) {
     const status = completed ? 'completed' : 'not_started';

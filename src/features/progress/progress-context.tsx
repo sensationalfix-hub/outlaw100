@@ -29,7 +29,7 @@ export function ProgressProvider({ userId, children }: { userId: string; childre
 
   useEffect(() => {
     const supabase = createSupabaseBrowserClient();
-    const repository = createSupabaseProgressRepository(supabase as any, userId);
+    const repository = createSupabaseProgressRepository(supabase as unknown as Parameters<typeof createSupabaseProgressRepository>[0], userId);
     const backup = createLocalProgressBackup(window.localStorage, `outlaw100:progress:v1:${userId}`);
     const nextStore = new CanonicalProgressStore(repository, backup);
     setStore(nextStore);
@@ -77,7 +77,7 @@ export function ProgressProvider({ userId, children }: { userId: string; childre
       const next = parseProgressExport(raw);
       await store.importSnapshot(next);
     },
-  }), [snapshot, ready, error, store, userId]);
+  }), [snapshot, ready, error, store]);
 
   return <ProgressContext.Provider value={value}>{children}</ProgressContext.Provider>;
 }
