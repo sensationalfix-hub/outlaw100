@@ -30,3 +30,5 @@ jobs:
         run: npm run lint
       - name: Production build
         run: npm run build
+
+# Touch after typed runtime lint fix so the verification run is triggered by a user-token commit.
