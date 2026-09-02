@@ -1,0 +1,35 @@
+name: export-source
+
+on:
+  push:
+    paths:
+      - .github/workflows/export-source.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/upload-artifact@v4
+        with:
+          name: outlaw100-source
+          path: |
+            .env.example
+            .gitignore
+            README.md
+            eslint.config.mjs
+            next.config.ts
+            package.json
+            tsconfig.json
+            docs
+            public
+            scripts
+            src
+            supabase
+            tests
+          if-no-files-found: error
+          compression-level: 6
