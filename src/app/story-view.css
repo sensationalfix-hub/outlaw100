@@ -90,7 +90,7 @@
 .story-chapter-section > header {
   display: flex;
   justify-content: space-between;
-  align-items: end;
+  align-items: flex-end;
   padding: 0 2px 9px;
 }
 .story-chapter-section > header small {
