@@ -50,6 +50,34 @@ test('Historia orders chapters and missions from source metadata instead of alph
   assert.equal(groups[1].label, 'Capítulo 2 · Horseshoe Overlook');
 });
 
+test('Historia uses canonical campaign order even when legacy groupIndex metadata is scrambled', () => {
+  const catalog: CanonicalCatalog = {
+    ...storyCatalog(),
+    entities: [
+      mission('e2', 'Epilogue II mission', "Epílogo II · Beecher's Hope", 0, 1),
+      mission('c1', 'Chapter 1 mission', 'Capítulo 1 · Colter', 1, 1),
+      mission('c4', 'Chapter 4 mission', 'Capítulo 4 · Shady Belle', 2, 1),
+      mission('c3', 'Chapter 3 mission', 'Capítulo 3 · Clemens Point', 3, 1),
+      mission('c5', 'Chapter 5 mission', 'Capítulo 5 · Guarma', 4, 1),
+      mission('c2', 'Chapter 2 mission', 'Capítulo 2 · Mirador de la Herradura', 5, 1),
+      mission('c6', 'Chapter 6 mission', 'Capítulo 6 · Beaver Hollow', 6, 1),
+      mission('e1', 'Epilogue I mission', 'Epílogo I · Pronghorn Ranch', 7, 1),
+    ],
+    criteria: [],
+  };
+  const groups = buildStoryGroups(catalog, {});
+  assert.deepEqual(groups.map(({ label }) => label), [
+    'Capítulo 1 · Colter',
+    'Capítulo 2 · Mirador de la Herradura',
+    'Capítulo 3 · Clemens Point',
+    'Capítulo 4 · Shady Belle',
+    'Capítulo 5 · Guarma',
+    'Capítulo 6 · Beaver Hollow',
+    'Epílogo I · Pronghorn Ranch',
+    "Epílogo II · Beecher's Hope",
+  ]);
+});
+
 test('Historia exposes gold state only when a mission has gold-* criteria', () => {
   const [colter] = buildStoryGroups(storyCatalog(), { 'c1-gold-a': 'completed' });
   const [plain, medal] = colter.missions;

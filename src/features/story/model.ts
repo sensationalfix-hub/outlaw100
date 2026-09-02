@@ -25,6 +25,25 @@ function numericMetadata(entity: CatalogEntity, key: string, fallback = 0): numb
   return Number.isFinite(value) ? value : fallback;
 }
 
+function canonicalChapterOrder(label: string, legacyOrder: number): number {
+  const normalized = label
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase();
+
+  const chapter = normalized.match(/\bcapitulo\s+(\d+)\b/);
+  if (chapter) {
+    const number = Number(chapter[1]);
+    if (number >= 1 && number <= 6) return number;
+  }
+
+  const epilogue = normalized.match(/\bepilogo\s+(ii|i)\b/);
+  if (epilogue?.[1] === 'i') return 7;
+  if (epilogue?.[1] === 'ii') return 8;
+
+  return 1000 + legacyOrder;
+}
+
 export function buildStoryGroups(
   catalog: CanonicalCatalog,
   criterionProgress: Record<string, string>,
@@ -40,7 +59,8 @@ export function buildStoryGroups(
   const grouped = new Map<string, StoryChapterGroup>();
   for (const entity of story) {
     const label = String(entity.metadata?.chapterLabel ?? 'Historia');
-    const groupOrder = numericMetadata(entity, 'groupIndex', Number.MAX_SAFE_INTEGER);
+    const legacyGroupOrder = numericMetadata(entity, 'groupIndex', Number.MAX_SAFE_INTEGER);
+    const groupOrder = canonicalChapterOrder(label, legacyGroupOrder);
     const missionOrder = numericMetadata(entity, 'missionIndex', Number.MAX_SAFE_INTEGER);
     const criteria = criteriaByEntity.get(entity.id) ?? [];
     const goldCriteria = criteria
