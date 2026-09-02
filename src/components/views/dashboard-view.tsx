@@ -100,6 +100,11 @@ export function DashboardView({
     else await progress.setTaskStatus(task.id, status);
   }
 
+  async function setMissionCompleted(completed: boolean) {
+    if (!model.missionCompletion) return;
+    await progress.setCriterionStatus(model.missionCompletion.criterion.id, completed ? 'completed' : 'not_started');
+  }
+
   async function setWholeMilestone(completed: boolean) {
     const status = completed ? 'completed' : 'not_started';
     const criterionIds = model.tasks.flatMap((task) => task.criterionId ? [task.criterionId] : []);
@@ -215,7 +220,8 @@ export function DashboardView({
           <span className={milestone.missableRisk ? 'danger' : ''}>{milestone.missableRisk ? 'PERDIBLE' : 'ventana estable'}</span>
         </div>
         <div className="hero-actions">
-          {model.tasks[0] && <button className={`primary-check ${milestoneDone ? 'done' : ''}`} onClick={() => setWholeMilestone(!milestoneDone)}><span>{milestoneDone ? '✓' : ''}</span>{milestoneDone ? 'Hito completado' : 'Marcar hito completado'}</button>}
+          {model.missionCompletion && <button className={`primary-check mission-check ${model.missionCompletion.done ? 'done' : ''}`} onClick={() => setMissionCompleted(!model.missionCompletion!.done)}><span>{model.missionCompletion.done ? '✓' : ''}</span>{model.missionCompletion.done ? 'Misión completada' : 'Marcar misión completada'}</button>}
+          {model.tasks[0] && <button className={`primary-check milestone-check ${milestoneDone ? 'done' : ''}`} onClick={() => setWholeMilestone(!milestoneDone)}><span>{milestoneDone ? '✓' : ''}</span>{milestoneDone ? 'Hito completado' : 'Marcar hito completado'}</button>}
           <button className="secondary-action" onClick={onOpenRoute}>Ver ruta completa</button>
         </div>
       </article>
