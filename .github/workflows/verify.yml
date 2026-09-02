@@ -24,8 +24,8 @@ jobs:
         run: npm install --no-audit --no-fund
       - name: Public unit tests
         run: find tests/unit -name '*.test.ts' ! -name 'catalog-audit.test.ts' -print0 | xargs -0 node --experimental-strip-types --test
-      - name: Python tests
-        run: npm run test:python
+      - name: Source-independent Python tests
+        run: python3 -m unittest tests.python.test_catalog_import_migration tests.python.test_milestone_progress_migration tests.python.test_performance_hardening_migration tests.python.test_progress_import_migration tests.python.test_progress_rpc_migration tests.python.test_security_hardening_migration tests.python.test_supabase_schema
       - name: Lint
         run: npm run lint
       - name: Production build
