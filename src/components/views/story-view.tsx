@@ -5,7 +5,7 @@ import { buildEntityDetail } from '@/features/entities/detail-model';
 import { useProgress } from '@/features/progress/progress-context';
 import { ProgressStatusSelect } from '@/features/progress/status-control';
 import { normalizeSearch } from '@/features/search/model';
-import { buildStoryGroups, type StoryMissionModel } from '@/features/story/model';
+import { buildStoryGroups } from '@/features/story/model';
 import type { CanonicalCatalog, CatalogCriterion } from '@/lib/catalog/types';
 
 export function StoryView({
