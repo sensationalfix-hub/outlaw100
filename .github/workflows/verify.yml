@@ -22,13 +22,13 @@ jobs:
           node-version: 22
       - name: Install dependencies
         run: npm install --no-audit --no-fund
-      - name: Public unit tests
-        run: find tests/unit -name '*.test.ts' ! -name 'catalog-audit.test.ts' -print0 | xargs -0 node --experimental-strip-types --test
+      - name: Unit tests
+        run: find tests/unit -name '*.test.ts' -print0 | xargs -0 node --experimental-strip-types --test
+      - name: Canonical catalog audit
+        run: npm run audit:data
       - name: Source-independent Python tests
         run: python3 -m unittest tests.python.test_catalog_import_migration tests.python.test_milestone_progress_migration tests.python.test_performance_hardening_migration tests.python.test_progress_import_migration tests.python.test_progress_rpc_migration tests.python.test_security_hardening_migration tests.python.test_supabase_schema
       - name: Lint
         run: npm run lint
       - name: Production build
         run: npm run build
-
-# Touch after typed runtime lint fix so the verification run is triggered by a user-token commit.
