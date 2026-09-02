@@ -53,7 +53,7 @@ export function AppShell({
   return (
     <div className="outlaw-shell">
       <header className="outlaw-topbar">
-        <button className="outlaw-brand" onClick={() => onViewChange('dashboard')}>
+        <button className="outlaw-brand" onClick={() => onViewChange('dashboard')} title="OUTLAW 100 · Dashboard" aria-label="OUTLAW 100 · Dashboard">
           <span className="outlaw-mark">O</span><span><small>RDR2 ULTRA COMPLETIONIST</small><b>OUTLAW <em>100</em></b></span>
         </button>
         <div className="outlaw-top-center">
@@ -71,10 +71,10 @@ export function AppShell({
         </div>
       </header>
       <aside className="outlaw-sidebar">
-        <nav>
-          {NAV_ITEMS.map(([id, icon, label]) => <button key={id} className={view === id ? 'active' : ''} onClick={() => onViewChange(id)}><span>{icon}</span><b>{label}</b></button>)}
+        <nav aria-label="Navegación principal">
+          {NAV_ITEMS.map(([id, icon, label]) => <button key={id} className={view === id ? 'active' : ''} onClick={() => onViewChange(id)} title={label} aria-label={label}><span aria-hidden="true">{icon}</span><b>{label}</b></button>)}
         </nav>
-        <div className="sidebar-progress"><strong>{Math.round(progressPercent)}%</strong><span>PROGRESO GLOBAL</span><div><i style={{ width: `${progressPercent}%` }} /></div></div>
+        <div className="sidebar-progress" title={`${Math.round(progressPercent)}% de progreso global`}><strong>{Math.round(progressPercent)}%</strong><span>PROGRESO GLOBAL</span><div><i style={{ width: `${progressPercent}%` }} /></div></div>
       </aside>
       <main className="outlaw-main">{children}</main>
       {progress.error && <div className="outlaw-toast">{progress.error}</div>}

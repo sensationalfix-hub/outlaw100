@@ -60,13 +60,19 @@ function LoadedApp() {
     setView('map');
   }
 
+  function openMilestone(milestone: CatalogMilestone) {
+    setSelectedMilestoneId(milestone.id);
+    setSelectedEntityId(null);
+    setView('dashboard');
+  }
+
   const page = useMemo(() => {
     if (!catalog || !selected) return null;
-    if (view === 'dashboard') return <DashboardView catalog={catalog} milestone={selected} onOpenRoute={() => setView('route')} onOpenEntity={openEntity} onOpenMap={() => setView('map')} />;
-    if (view === 'route') return <RouteView catalog={catalog} current={selected} onSelect={(milestone: CatalogMilestone) => { setSelectedMilestoneId(milestone.id); setView('dashboard'); }} />;
+    if (view === 'dashboard') return <DashboardView catalog={catalog} milestone={selected} onOpenRoute={() => setView('route')} onOpenEntity={openEntity} onOpenMap={() => setView('map')} onSelectMilestone={openMilestone} />;
+    if (view === 'route') return <RouteView catalog={catalog} current={selected} onSelect={openMilestone} />;
     if (view === 'archive') return <ArchiveView catalog={catalog} selectedEntityId={selectedEntityId} onOpenMap={openMapForEntity} onOpenEntity={openEntity} />;
     if (view === 'crafting') return <CraftingView catalog={catalog} />;
-    if (view === 'requests') return <RouteView catalog={{ ...catalog, milestones: catalog.milestones.filter((m) => m.kind === 'item_request') }} current={selected} onSelect={(m) => { setSelectedMilestoneId(m.id); setView('dashboard'); }} />;
+    if (view === 'requests') return <RouteView catalog={{ ...catalog, milestones: catalog.milestones.filter((m) => m.kind === 'item_request') }} current={selected} onSelect={openMilestone} />;
     if (view === 'map') return <MapView catalog={catalog} currentMilestone={selected} focusEntityId={mapFocusEntityId} />;
     const config = ENTITY_VIEWS[view];
     if (config) return <EntityGridView catalog={catalog} {...config} selectedEntityId={selectedEntityId} onOpenMap={openMapForEntity} onOpenEntity={openEntity} />;

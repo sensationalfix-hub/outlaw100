@@ -1,0 +1,20 @@
+@import url('https://fonts.cdnfonts.com/css/chinese-rocks');
+
+/* The supplied local font remains the canonical asset. Until it is served from /public,
+   use the same Chinese Rocks family as the web fallback instead of silently falling to Impact. */
+.outlaw-mark,
+.outlaw-brand b,
+.sidebar-progress strong,
+.auth-brand,
+.auth-card h1,
+.loading-screen h1,
+.fatal-screen h1,
+.dashboard-hero h1,
+.dashboard-card header h2,
+.storyline-heading strong,
+.milestone-index,
+.view-heading h1,
+.big-count {
+  font-family: 'Chinese Rocks Rg', 'Chinese Rocks', Impact, 'Arial Narrow', sans-serif !important;
+  font-weight: 400 !important;
+}

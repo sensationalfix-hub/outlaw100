@@ -1,0 +1,238 @@
+/* Dashboard golden-reference pass: desktop first, legacy RDR2 skin over canonical data. */
+
+@font-face {
+  font-family: 'Chinese Rocks';
+  src: url('/fonts/chinese-rocks.otf') format('opentype');
+  font-display: swap;
+  font-weight: 400;
+}
+
+:root {
+  --outlaw-blood: #c9261d;
+  --outlaw-blood-dark: #5e1711;
+  --outlaw-gold: #c7a64f;
+  --outlaw-bone: #efe9da;
+  --outlaw-ash: #9c9383;
+  --outlaw-glass: rgba(10, 9, 7, .82);
+}
+
+@media (min-width: 1100px) {
+  /* Compact rail. Keep labels in DOM for accessibility, remove the SaaS sidebar from sight. */
+  .outlaw-shell { grid-template-columns: 68px minmax(0, 1fr); grid-template-rows: 64px minmax(0, 1fr); }
+  .outlaw-topbar { grid-template-columns: 68px 1fr auto; }
+  .outlaw-brand { height: 64px; width: 68px; padding: 0; justify-content: center; border-right: 1px solid var(--line); }
+  .outlaw-brand > span:last-child { display: none; }
+  .outlaw-mark { width: 30px; height: 39px; font-size: 26px; }
+  .outlaw-sidebar nav { padding: 10px 8px; gap: 5px; scrollbar-width: none; }
+  .outlaw-sidebar nav::-webkit-scrollbar { display: none; }
+  .outlaw-sidebar nav button { height: 38px; padding: 0; display: grid; place-items: center; grid-template-columns: 1fr; border-radius: 10px; }
+  .outlaw-sidebar nav button span { font-size: 15px; }
+  .outlaw-sidebar nav button b { display: none; }
+  .outlaw-sidebar nav button.active:before { left: -8px; height: 22px; }
+  .sidebar-progress { padding: 12px 8px 14px; text-align: center; }
+  .sidebar-progress strong { font-size: 21px; }
+  .sidebar-progress span { font-size: 5px; letter-spacing: .7px; }
+  .sidebar-progress > div { margin-top: 7px; }
+  .outlaw-top-center { min-width: 0; display: grid; grid-template-columns: auto minmax(260px, 620px); align-items: center; justify-content: center; gap: 14px; }
+  .global-search { width: min(620px, 100%); }
+
+  /* Dashboard canvas */
+  .dashboard-view.golden-dashboard {
+    height: 100%;
+    min-height: 0;
+    padding: 10px 12px 12px;
+    display: grid;
+    grid-template-rows: 42px minmax(0, 1fr) 82px;
+    gap: 8px;
+    overflow: hidden;
+  }
+
+  .dashboard-chapters {
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 1px 2px 4px;
+    scrollbar-width: none;
+    scroll-snap-type: x proximity;
+  }
+  .dashboard-chapters::-webkit-scrollbar { display: none; }
+  .chapter-pill {
+    flex: 0 0 auto;
+    scroll-snap-align: center;
+    min-height: 34px;
+    padding: 0 12px;
+    border: 1px solid rgba(239,233,218,.12);
+    border-radius: 999px;
+    background: rgba(12,10,8,.78);
+    color: #827a6d;
+    cursor: pointer;
+    display: inline-flex;
+    gap: 8px;
+    align-items: center;
+    text-transform: uppercase;
+    white-space: nowrap;
+    transition: border-color .16s ease, background .16s ease, color .16s ease, transform .16s ease;
+  }
+  .chapter-pill:hover { color: var(--outlaw-bone); border-color: rgba(239,233,218,.26); transform: translateY(-1px); }
+  .chapter-pill strong { font-size: 7px; letter-spacing: 1px; }
+  .chapter-pill small { font-size: 6px; letter-spacing: .6px; color: #665f55; }
+  .chapter-pill.active { color: var(--outlaw-bone); border-color: rgba(201,38,29,.52); background: rgba(91,20,16,.36); box-shadow: inset 0 0 0 1px rgba(201,38,29,.08); }
+  .chapter-pill.active small { color: #bc776f; }
+
+  .golden-dashboard .dashboard-stage {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 310px;
+    grid-template-rows: minmax(0, 1fr);
+    min-height: 0;
+    overflow: hidden;
+    border: 1px solid rgba(239,233,218,.12);
+    border-radius: 19px;
+    isolation: isolate;
+    background: #0b0907 url('/media/outlaw-sunset.jpg') center/cover no-repeat;
+    box-shadow: 0 24px 80px rgba(0,0,0,.22);
+  }
+  .golden-dashboard .dashboard-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 42%; z-index: -4; filter: saturate(.72) contrast(1.04) brightness(.82); }
+  .golden-dashboard .dashboard-vignette {
+    position: absolute; inset: 0; z-index: -3; pointer-events: none;
+    background:
+      linear-gradient(90deg, rgba(5,5,4,.91) 0%, rgba(5,5,4,.69) 29%, rgba(5,5,4,.16) 58%, rgba(5,5,4,.66) 78%, rgba(5,5,4,.88) 100%),
+      linear-gradient(0deg, rgba(5,5,4,.88) 0%, rgba(5,5,4,.12) 47%, rgba(15,8,5,.15) 100%),
+      radial-gradient(circle at 52% 40%, transparent 0%, rgba(0,0,0,.07) 48%, rgba(0,0,0,.44) 100%);
+  }
+  .golden-dashboard .dashboard-stage:after { content: ''; position: absolute; inset: 0; z-index: -2; pointer-events: none; opacity: .16; mix-blend-mode: soft-light; background-image: repeating-linear-gradient(0deg, rgba(255,255,255,.025) 0 1px, transparent 1px 3px); }
+
+  .golden-dashboard .dashboard-meta { position: absolute; top: 13px; right: 326px; left: auto; z-index: 5; display: flex; gap: 6px; }
+  .golden-dashboard .dashboard-meta .chip { min-height: 25px; padding-inline: 10px; background: rgba(8,7,6,.63); backdrop-filter: blur(7px); }
+
+  .golden-dashboard .dashboard-hero {
+    position: absolute;
+    left: 18px;
+    bottom: 18px;
+    width: min(48%, 630px);
+    max-width: none;
+    padding: 22px 24px 20px 26px;
+    border-left: 3px solid var(--outlaw-blood);
+    border-radius: 0 14px 14px 0;
+    background: linear-gradient(90deg, rgba(7,7,6,.93), rgba(7,7,6,.78) 78%, rgba(7,7,6,.62));
+    box-shadow: 18px 24px 54px rgba(0,0,0,.18);
+    backdrop-filter: blur(7px);
+    z-index: 3;
+  }
+  .golden-dashboard .dashboard-hero > small,
+  .golden-dashboard .dashboard-card header small,
+  .storyline-heading small,
+  .nearby-kicker { color: #b7a98f; font-size: 7px; letter-spacing: 2px; }
+  .golden-dashboard .dashboard-hero h1 {
+    margin: 7px 0 0;
+    font: 400 clamp(42px, 4.25vw, 72px)/.84 'Chinese Rocks', Impact, 'Arial Narrow', sans-serif;
+    letter-spacing: .2px;
+    color: var(--outlaw-bone);
+    text-transform: uppercase;
+    text-wrap: balance;
+    max-width: 590px;
+  }
+  .golden-dashboard .dashboard-hero .original-title { margin-top: 7px; }
+  .golden-dashboard .dashboard-hero > p:not(.original-title) { max-width: 520px; color: #c0b7a4; font-size: 10px; line-height: 1.5; }
+  .golden-dashboard .hero-stats { margin-top: 11px; gap: 6px; }
+  .golden-dashboard .hero-stats span { border-radius: 999px; background: rgba(8,7,6,.58); padding: 6px 9px; }
+  .golden-dashboard .hero-actions { margin-top: 12px; }
+  .golden-dashboard .primary-check, .golden-dashboard .secondary-action { border-radius: 999px; height: 34px; }
+
+  .golden-dashboard .dashboard-card { border-radius: 16px; backdrop-filter: blur(10px); box-shadow: 0 22px 46px rgba(0,0,0,.17); }
+  .golden-dashboard .guide-card {
+    position: absolute;
+    left: 57%;
+    bottom: 18px;
+    width: min(300px, 22vw);
+    height: min(58%, 410px);
+    max-height: none;
+    z-index: 4;
+    border-color: rgba(223,54,43,.38);
+    background: linear-gradient(180deg, rgba(112,28,21,.91), rgba(61,17,13,.92));
+    box-shadow: 0 24px 54px rgba(0,0,0,.22), inset 0 0 44px rgba(196,36,27,.08);
+  }
+  .golden-dashboard .guide-card header { padding: 15px 16px 12px; border-bottom-color: rgba(255,211,196,.12); }
+  .golden-dashboard .guide-card header small { color: #d7a097; }
+  .golden-dashboard .guide-card header h2 { font-size: 28px; color: #f0e8da; }
+  .golden-dashboard .guide-card .dashboard-scroll { height: calc(100% - 66px); padding: 0; }
+  .golden-dashboard .guide-row { padding: 10px 12px; grid-template-columns: 25px 1fr; border-bottom-color: rgba(255,223,210,.09); }
+  .golden-dashboard .guide-row > span { border-color: rgba(255,231,218,.24); color: #d8b5a8; }
+  .golden-dashboard .guide-row b { font-size: 9px; color: #f0e8da; }
+  .golden-dashboard .guide-row p { color: #caaea2; }
+  .golden-dashboard .guide-row.critical { background: rgba(255,50,38,.12); border-left: 0; }
+
+  .golden-dashboard .dashboard-tools {
+    grid-column: 2;
+    grid-row: 1;
+    z-index: 3;
+    min-height: 0;
+    padding: 50px 13px 13px 0;
+    display: grid;
+    grid-template-rows: minmax(150px, .78fr) minmax(0, 1.22fr);
+    gap: 9px;
+  }
+  .golden-dashboard .gold-card {
+    border-color: rgba(199,166,79,.45);
+    background: linear-gradient(145deg, rgba(79,62,11,.78), rgba(32,26,8,.88));
+    box-shadow: 0 18px 48px rgba(0,0,0,.2), inset 0 0 42px rgba(208,165,50,.06);
+  }
+  .golden-dashboard .gold-card header { border-bottom-color: rgba(231,196,97,.15); }
+  .golden-dashboard .gold-card header small { color: #d2b65f; }
+  .golden-dashboard .gold-card header h2 { font-size: 27px; color: #f0dda0; }
+  .golden-dashboard .gold-list button { border: 0; border-bottom: 1px solid rgba(237,211,125,.10); background: rgba(255,255,255,.014); grid-template-columns: 22px 1fr; padding: 9px 5px; }
+  .golden-dashboard .gold-list button span { border-radius: 50%; border-color: rgba(222,191,96,.52); }
+  .golden-dashboard .gold-list button b { color: #d5c79d; }
+
+  .golden-dashboard .nearby-card { background: rgba(8,8,7,.88); border-color: rgba(239,233,218,.13); display: grid; grid-template-rows: auto auto minmax(0,1fr); }
+  .golden-dashboard .nearby-card header { padding-bottom: 9px; }
+  .golden-dashboard .nearby-card header h2 { font-size: 29px; }
+  .nearby-tabs { display: flex; gap: 4px; padding: 0 10px 8px; overflow-x: auto; scrollbar-width: none; }
+  .nearby-tabs::-webkit-scrollbar { display:none; }
+  .nearby-tabs button { flex: 0 0 auto; height: 24px; padding: 0 8px; border: 1px solid rgba(239,233,218,.12); border-radius: 999px; background: rgba(255,255,255,.015); color: #746e63; font-size: 6px; font-weight: 900; letter-spacing: .8px; text-transform: uppercase; cursor: pointer; }
+  .nearby-tabs button.active { color: #dca69f; border-color: rgba(201,38,29,.42); background: rgba(201,38,29,.08); }
+  .nearby-list { min-height: 0; overflow-y: auto; scrollbar-width: thin; scrollbar-color: rgba(239,233,218,.16) transparent; }
+  .nearby-item { width: 100%; border: 0; border-top: 1px solid rgba(239,233,218,.08); background: transparent; color: var(--outlaw-bone); display: grid; grid-template-columns: 24px minmax(0,1fr) auto; gap: 8px; align-items: start; padding: 10px 12px; text-align: left; cursor: pointer; }
+  .nearby-item:hover { background: rgba(255,255,255,.025); }
+  .nearby-status { width: 20px; height: 20px; border: 1px solid #48433a; border-radius: 50%; display: grid; place-items: center; color: #837b6d; font-size: 8px; }
+  .nearby-copy small { display:block; color:#a39782; font-size:6px; letter-spacing:1px; text-transform:uppercase; }
+  .nearby-copy b { display:block; margin-top:2px; color:#e8e0d1; font-size:9px; }
+  .nearby-copy p { margin:3px 0 0; color:#8e8577; font-size:7px; line-height:1.35; overflow:hidden; text-overflow:ellipsis; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; }
+  .nearby-open { align-self:center; border:1px solid rgba(239,233,218,.13); border-radius:999px; padding:5px 7px; color:#9a9285; font-size:6px; font-weight:900; text-transform:uppercase; }
+
+  /* Bottom narrative rail: actual milestones, not anonymous dots. */
+  .dashboard-storyline {
+    min-width: 0;
+    border-top: 1px solid rgba(239,233,218,.10);
+    display: grid;
+    grid-template-columns: 185px minmax(0,1fr);
+    align-items: center;
+    gap: 10px;
+    padding: 5px 2px 0;
+  }
+  .storyline-heading small { display:block; color:#8c8170; }
+  .storyline-heading strong { display:block; margin-top:2px; font:400 20px/.86 'Chinese Rocks',Impact,sans-serif; color:var(--outlaw-bone); text-transform:uppercase; }
+  .storyline-heading span { display:block; margin-top:4px; color:#6f675c; font-size:6px; text-transform:uppercase; letter-spacing:.8px; }
+  .storyline-rail { min-width:0; display:flex; align-items:center; gap:8px; overflow-x:auto; overflow-y:hidden; scrollbar-width:none; scroll-snap-type:x proximity; padding:5px 4px 8px; }
+  .storyline-rail::-webkit-scrollbar { display:none; }
+  .milestone-node { position:relative; scroll-snap-align:center; flex:0 0 auto; width:146px; height:54px; border:1px solid rgba(239,233,218,.11); border-radius:12px; background:rgba(15,13,10,.72); color:#7e776b; display:grid; grid-template-columns:28px minmax(0,1fr); align-items:center; gap:7px; padding:6px 8px; cursor:pointer; text-align:left; }
+  .milestone-node:before { content:''; position:absolute; left:-9px; top:50%; width:8px; height:1px; background:rgba(239,233,218,.10); }
+  .milestone-node:first-child:before { display:none; }
+  .milestone-index { width:28px; height:28px; border:1px solid #4c463c; border-radius:50%; display:grid; place-items:center; font:400 13px/1 'Chinese Rocks',Impact,sans-serif; }
+  .milestone-copy small { display:block; color:#645e54; font-size:5px; letter-spacing:.7px; text-transform:uppercase; }
+  .milestone-copy b { display:-webkit-box; margin-top:2px; overflow:hidden; -webkit-line-clamp:2; -webkit-box-orient:vertical; font-size:7px; line-height:1.2; color:#989083; }
+  .milestone-node.done { border-color:rgba(137,148,108,.22); }
+  .milestone-node.done .milestone-index { border-color:#71805b; color:#9baa7b; background:rgba(116,133,87,.10); }
+  .milestone-node.current { border-color:rgba(201,38,29,.55); background:rgba(83,21,16,.54); box-shadow:0 0 0 3px rgba(201,38,29,.07); }
+  .milestone-node.current .milestone-index { border-color:var(--outlaw-blood); color:#fff0eb; background:var(--outlaw-blood); }
+  .milestone-node.current .milestone-copy small { color:#c98279; }
+  .milestone-node.current .milestone-copy b { color:#f0e8da; }
+}
+
+@media (max-width: 1099px) {
+  .dashboard-chapters { display:none; }
+  .dashboard-storyline { display:none; }
+}

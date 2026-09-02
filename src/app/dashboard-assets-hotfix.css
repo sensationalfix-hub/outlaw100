@@ -1,0 +1,6 @@
+/* Asset bridge while the legacy media catalog is being migrated one image at a time.
+   The restored cinematic hero is guaranteed to exist in public/media, so never render a
+   browser broken-image glyph over it when a catalog entry still points at missing legacy media. */
+@media (min-width: 1100px) {
+  .golden-dashboard .dashboard-bg { display: none !important; }
+}
