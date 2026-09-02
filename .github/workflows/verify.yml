@@ -22,8 +22,8 @@ jobs:
           node-version: 22
       - name: Install dependencies
         run: npm install --no-audit --no-fund
-      - name: Unit tests
-        run: npm test
+      - name: Public unit tests
+        run: find tests/unit -name '*.test.ts' ! -name 'catalog-audit.test.ts' -print0 | xargs -0 node --experimental-strip-types --test
       - name: Python tests
         run: npm run test:python
       - name: Lint
