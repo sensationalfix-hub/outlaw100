@@ -1,0 +1,52 @@
+{
+  "name": "outlaw100",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint .",
+    "test": "node --experimental-strip-types --test tests/unit/*.test.ts",
+    "test:watch": "vitest",
+    "test:e2e": "playwright test",
+    "import:xlsx": "python scripts/importers/xlsx_importer.py data/source/rdr2-completion.xlsx --out data/generated/xlsx-catalog.json",
+    "import:pdf": "python scripts/importers/pdf_importer.py data/source/rdr2-complete-checklist.pdf --out data/generated/pdf-route.json",
+    "import:html": "python3 scripts/importers/html_importer.py --html data/source/outlaw100-legacy.html --font data/source/chinese-rocks.otf --output data/generated/html-metadata.json --public-dir public",
+    "build:catalog": "python3 scripts/build_catalog.py --xlsx data/generated/xlsx-catalog.json --pdf data/generated/pdf-route.json --html data/generated/html-metadata.json --output data/generated/catalog.json",
+    "audit:data": "node --experimental-strip-types scripts/audit-catalog.ts",
+    "seed:sql": "python3 scripts/generate_seed.py --catalog data/generated/catalog.json --output supabase/seed.sql --chunks-output data/generated/seed-chunks.json --batch-size 400",
+    "test:unit": "node --experimental-strip-types --test tests/unit/*.test.ts",
+    "test:python": "python3 -m unittest discover -s tests/python -p 'test_*.py'",
+    "verify:data": "npm run build:catalog && npm run audit:data && npm run seed:sql"
+  },
+  "dependencies": {
+    "@supabase/ssr": "^0.7.0",
+    "@supabase/supabase-js": "^2.57.0",
+    "cheerio": "^1.1.2",
+    "leaflet": "^1.9.4",
+    "next": "^15.5.0",
+    "pdfjs-dist": "^5.4.54",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "react-leaflet": "^5.0.0",
+    "zod": "^4.1.5"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3.3.1",
+    "@playwright/test": "^1.55.0",
+    "@testing-library/jest-dom": "^6.8.0",
+    "@testing-library/react": "^16.3.0",
+    "@types/leaflet": "^1.9.20",
+    "@types/node": "^24.3.0",
+    "@types/react": "^19.1.12",
+    "@types/react-dom": "^19.1.9",
+    "eslint": "^9.34.0",
+    "eslint-config-next": "^15.5.0",
+    "jsdom": "^26.1.0",
+    "tsx": "^4.20.5",
+    "typescript": "^5.9.2",
+    "vitest": "^3.2.4"
+  },
+  "type": "module"
+}
