@@ -64,3 +64,11 @@ test('gold medal progress does not discard the other mission checks', () => {
   assert.equal(medal.completedCriteria, 2);
   assert.deepEqual(medal.goldCriteria.map(({ key }) => key), ['gold-1', 'gold-2']);
 });
+
+test('mission completion follows the complete criterion independently from medal objectives', () => {
+  const [colter] = buildStoryGroups(storyCatalog(), { 'c1-other': 'completed' });
+  const medal = colter.missions[1];
+  assert.equal(medal.completed, true);
+  assert.equal(medal.goldCompleted, 0);
+  assert.equal(medal.goldTotal, 2);
+});
