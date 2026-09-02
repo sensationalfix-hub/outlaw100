@@ -1,0 +1,46 @@
+name: one-time-runtime-lint-fix
+
+on:
+  push:
+    paths:
+      - .github/workflows/fix-runtime-lint.yml
+
+permissions:
+  contents: write
+
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Type the two remaining runtime boundaries
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          dashboard = Path('src/components/views/dashboard-view.tsx')
+          text = dashboard.read_text()
+          old = "  const inferred = Boolean(milestone.metadata?.editorialInference ?? (milestone.availability as any)?.editorialInference);"
+          new = "  const availability = milestone.availability && typeof milestone.availability === 'object' ? milestone.availability as Record<string, unknown> : undefined;\n  const inferred = Boolean(milestone.metadata?.editorialInference ?? availability?.editorialInference);"
+          if old not in text:
+              raise SystemExit('dashboard lint target not found')
+          dashboard.write_text(text.replace(old, new))
+
+          progress = Path('src/features/progress/progress-context.tsx')
+          text = progress.read_text()
+          old = "    const repository = createSupabaseProgressRepository(supabase as any, userId);"
+          new = "    const repository = createSupabaseProgressRepository(supabase as unknown as Parameters<typeof createSupabaseProgressRepository>[0], userId);"
+          if old not in text:
+              raise SystemExit('progress lint target not found')
+          text = text.replace(old, new)
+          text = text.replace("  }), [snapshot, ready, error, store, userId]);", "  }), [snapshot, ready, error, store]);")
+          progress.write_text(text)
+          PY
+          rm .github/workflows/fix-runtime-lint.yml
+      - name: Commit typed runtime fix
+        run: |
+          git config user.name "sensationalfix-hub"
+          git config user.email "sensationalfix@icloud.com"
+          git add src/components/views/dashboard-view.tsx src/features/progress/progress-context.tsx .github/workflows/fix-runtime-lint.yml
+          git commit -m "fix: type remaining runtime lint boundaries"
+          git push origin HEAD:main
