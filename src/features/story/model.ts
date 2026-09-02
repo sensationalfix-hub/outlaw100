@@ -7,6 +7,7 @@ export type StoryMissionModel = {
   hasGold: boolean;
   goldCompleted: number;
   goldTotal: number;
+  completed: boolean;
   completedCriteria: number;
   totalCriteria: number;
   order: number;
@@ -44,6 +45,7 @@ export function buildStoryGroups(
     const goldCriteria = criteria
       .filter((criterion) => criterion.key.startsWith('gold-'))
       .sort((a, b) => Number(a.key.slice(5)) - Number(b.key.slice(5)));
+    const completionCriterion = criteria.find((criterion) => criterion.key === 'complete');
     const mission: StoryMissionModel = {
       entity,
       criteria,
@@ -51,6 +53,7 @@ export function buildStoryGroups(
       hasGold: goldCriteria.length > 0,
       goldCompleted: goldCriteria.filter((criterion) => criterionProgress[criterion.id] === 'completed').length,
       goldTotal: goldCriteria.length,
+      completed: completionCriterion ? criterionProgress[completionCriterion.id] === 'completed' : false,
       completedCriteria: criteria.filter((criterion) => criterionProgress[criterion.id] === 'completed').length,
       totalCriteria: criteria.length,
       order: missionOrder,
