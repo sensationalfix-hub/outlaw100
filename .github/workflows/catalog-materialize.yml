@@ -1,0 +1,54 @@
+name: materialize-catalog
+
+on:
+  push:
+    paths:
+      - catalog-payload/READY
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  materialize:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - name: Rebuild canonical catalog
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat catalog-payload/catalog.part.* > /tmp/catalog.b64
+          echo '4ca23246a0563891c41c2e57fa82470371c48da4e45b09604d9d9f45ab13e41b  /tmp/catalog.b64' | sha256sum -c -
+          base64 -d /tmp/catalog.b64 > /tmp/catalog.json.xz
+          echo '01edcb1852351cef5b5690a626d8860e2ed453a0a0ad4bf6271242759a0fd29b  /tmp/catalog.json.xz' | sha256sum -c -
+          xz -dc /tmp/catalog.json.xz > /tmp/catalog.json
+          echo 'deabfa7266915e8f06ec2706d6b0da810bd032f5beb63bfe31b3fa603bb4f473  /tmp/catalog.json' | sha256sum -c -
+          python3 - <<'PY'
+          import json
+          p=json.load(open('/tmp/catalog.json'))
+          assert len(p['entities']) == 2228
+          assert len(p['criteria']) == 3067
+          assert len(p['milestones']) == 271
+          assert len(p['milestoneTasks']) == 1761
+          assert len(p['recipes']) == 147
+          assert len(p['sourceReferences']) == 5529
+          assert p['audit']['hasAmericanVenom'] is True
+          PY
+          mkdir -p data/generated public/data
+          cp /tmp/catalog.json data/generated/catalog.json
+          cp /tmp/catalog.json public/data/catalog.json
+      - name: Commit canonical catalog
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf catalog-payload
+          rm -f .github/workflows/catalog-materialize.yml
+          git config user.name 'OUTLAW100 catalog bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add -A
+          git commit -m 'data: publish canonical completionist catalog'
+          git push
