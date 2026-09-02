@@ -1,0 +1,232 @@
+/* Historia: campaign order + explicit gold-medal missions. */
+.story-view { overflow: hidden; }
+.story-heading { min-height: 58px; }
+.story-shell {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  gap: 11px;
+  height: calc(100% - 70px);
+  min-height: 470px;
+}
+.story-browser,
+.story-detail {
+  border: 1px solid var(--line);
+  background: rgba(24,21,17,.77);
+  border-radius: 11px;
+  min-height: 0;
+}
+.story-browser {
+  display: grid;
+  grid-template-rows: 42px 44px minmax(0,1fr);
+  overflow: hidden;
+}
+.story-toolbar {
+  display: grid;
+  grid-template-columns: minmax(0,1fr) auto;
+  gap: 10px;
+  align-items: center;
+  padding: 7px 9px;
+  border-bottom: 1px solid var(--line);
+}
+.story-toolbar input {
+  width: 100%;
+  height: 28px;
+  padding: 0 10px;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  background: #12100d;
+  color: var(--bone);
+  outline: none;
+  font-size: 8px;
+}
+.story-toolbar input:focus { border-color: rgba(195,41,29,.55); }
+.story-toolbar > span {
+  color: #746d60;
+  font-size: 7px;
+  text-transform: uppercase;
+  letter-spacing: .7px;
+}
+.story-chapter-nav {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 5px 8px 6px;
+  border-bottom: 1px solid var(--line);
+  scrollbar-width: none;
+}
+.story-chapter-nav::-webkit-scrollbar { display: none; }
+.story-chapter-nav button {
+  flex: 0 0 auto;
+  min-height: 28px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 0 9px;
+  border: 1px solid rgba(238,233,217,.11);
+  border-radius: 999px;
+  background: rgba(255,255,255,.018);
+  color: #8e8779;
+  cursor: pointer;
+  text-transform: uppercase;
+}
+.story-chapter-nav button:hover { border-color: rgba(238,233,217,.25); color: var(--bone); }
+.story-chapter-nav b { font-size: 6px; letter-spacing: .75px; }
+.story-chapter-nav small { color: #5f594f; font-size: 6px; }
+.story-scroll {
+  min-height: 0;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(238,233,217,.18) transparent;
+}
+.story-chapter-section {
+  scroll-margin-top: 8px;
+  padding: 15px 10px 17px;
+  border-bottom: 1px solid rgba(238,233,217,.08);
+}
+.story-chapter-section:last-child { border-bottom: 0; }
+.story-chapter-section > header {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  padding: 0 2px 9px;
+}
+.story-chapter-section > header small {
+  display: block;
+  color: var(--red);
+  font-size: 6px;
+  font-weight: 900;
+  letter-spacing: 1.4px;
+}
+.story-chapter-section > header h2 {
+  margin: 3px 0 0;
+  font: 400 24px/.9 'Chinese Rocks', Impact, sans-serif;
+  text-transform: uppercase;
+  color: #e7e0d1;
+}
+.story-chapter-section > header > span {
+  color: #6f685b;
+  font-size: 7px;
+  text-transform: uppercase;
+  letter-spacing: .7px;
+}
+.story-mission-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0,1fr));
+  gap: 7px;
+}
+.story-mission-card {
+  min-width: 0;
+  min-height: 104px;
+  padding: 9px 10px 8px;
+  border: 1px solid rgba(238,233,217,.12);
+  border-radius: 9px;
+  background: linear-gradient(145deg, rgba(28,24,19,.92), rgba(20,18,15,.94));
+  color: var(--bone);
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  transition: transform .14s ease, border-color .14s ease, background .14s ease, box-shadow .14s ease;
+}
+.story-mission-card:hover {
+  transform: translateY(-1px);
+  border-color: rgba(238,233,217,.25);
+  background: linear-gradient(145deg, rgba(34,29,23,.95), rgba(22,19,16,.96));
+}
+.story-mission-card.selected {
+  border-color: rgba(195,41,29,.72);
+  box-shadow: inset 0 0 0 1px rgba(195,41,29,.18), 0 8px 24px rgba(0,0,0,.16);
+}
+.story-mission-card.done { opacity: .68; }
+.story-mission-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.story-mission-top > span {
+  color: #736c60;
+  font: 400 15px/1 'Chinese Rocks', Impact, sans-serif;
+}
+.story-mission-top small {
+  color: #696256;
+  font-size: 6px;
+}
+.story-mission-card h3 {
+  margin: 0;
+  color: #ddd5c4;
+  font-size: 9px;
+  line-height: 1.24;
+  font-weight: 800;
+}
+.story-mission-card > p {
+  margin: 4px 0 0;
+  font-size: 6px;
+  line-height: 1.3;
+  color: #6f685c;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.story-mission-card footer {
+  margin-top: auto;
+  padding-top: 9px;
+  color: #615b51;
+  font-size: 6px;
+  font-weight: 900;
+  letter-spacing: .65px;
+  text-transform: uppercase;
+}
+.story-mission-card.gold-mission {
+  border-color: rgba(198,166,92,.46);
+  background:
+    radial-gradient(circle at 88% 8%, rgba(198,166,92,.12), transparent 38%),
+    linear-gradient(145deg, rgba(35,29,15,.92), rgba(20,18,14,.96));
+  box-shadow: inset 0 0 28px rgba(198,166,92,.025);
+}
+.story-mission-card.gold-mission:hover {
+  border-color: rgba(210,180,103,.7);
+  box-shadow: inset 0 0 32px rgba(198,166,92,.05), 0 8px 24px rgba(0,0,0,.18);
+}
+.story-mission-card.gold-mission.selected {
+  border-color: #c6a65c;
+  box-shadow: inset 0 0 0 1px rgba(226,195,111,.2), 0 0 22px rgba(198,166,92,.09);
+}
+.story-gold-badge { color: #d2b66d; }
+.story-detail { overflow-y: auto; }
+.story-detail.has-gold { border-color: rgba(198,166,92,.25); }
+.story-gold-meta {
+  border-color: rgba(198,166,92,.32) !important;
+  background: rgba(198,166,92,.055) !important;
+}
+.story-gold-meta small,
+.story-gold-meta b { color: #d0b367 !important; }
+.story-gold-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #d5b969 !important;
+  border-top-color: rgba(198,166,92,.22) !important;
+}
+.story-gold-title span {
+  min-width: 34px;
+  padding: 4px 7px;
+  border: 1px solid rgba(198,166,92,.32);
+  border-radius: 999px;
+  background: rgba(198,166,92,.07);
+  text-align: center;
+  font-size: 7px;
+}
+.story-gold-list { background: linear-gradient(180deg, rgba(198,166,92,.025), transparent); }
+.story-gold-criterion { border-color: rgba(198,166,92,.16) !important; }
+.story-gold-criterion > button > span { border-color: rgba(198,166,92,.45) !important; }
+.story-gold-criterion > button.done > span { background: #c6a65c !important; border-color: #c6a65c !important; color: #15120d !important; }
+.story-gold-criterion b { color: #d7c695 !important; }
+.story-gold-criterion small { color: #8e7c50 !important; }
+
+@media (max-width: 1380px) {
+  .story-mission-grid { grid-template-columns: repeat(4, minmax(0,1fr)); }
+}
