@@ -1,0 +1,1 @@
+Temporary checksummed transfer area for the generated canonical catalog. It is removed automatically after materialization.
