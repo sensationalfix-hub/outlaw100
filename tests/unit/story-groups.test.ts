@@ -72,3 +72,16 @@ test('mission completion follows the complete criterion independently from medal
   assert.equal(medal.goldCompleted, 0);
   assert.equal(medal.goldTotal, 2);
 });
+
+test('a mission earns the gold visual state only after every gold objective is completed', () => {
+  const [partialChapter] = buildStoryGroups(storyCatalog(), { 'c1-gold-a': 'completed' });
+  const partial = partialChapter.missions[1];
+  assert.equal(partial.goldEarned, false);
+
+  const [completeChapter] = buildStoryGroups(storyCatalog(), {
+    'c1-gold-a': 'completed',
+    'c1-gold-b': 'completed',
+  });
+  const complete = completeChapter.missions[1];
+  assert.equal(complete.goldEarned, true);
+});

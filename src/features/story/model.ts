@@ -5,6 +5,7 @@ export type StoryMissionModel = {
   criteria: CatalogCriterion[];
   goldCriteria: CatalogCriterion[];
   hasGold: boolean;
+  goldEarned: boolean;
   goldCompleted: number;
   goldTotal: number;
   completed: boolean;
@@ -45,13 +46,15 @@ export function buildStoryGroups(
     const goldCriteria = criteria
       .filter((criterion) => criterion.key.startsWith('gold-'))
       .sort((a, b) => Number(a.key.slice(5)) - Number(b.key.slice(5)));
+    const goldCompleted = goldCriteria.filter((criterion) => criterionProgress[criterion.id] === 'completed').length;
     const completionCriterion = criteria.find((criterion) => criterion.key === 'complete');
     const mission: StoryMissionModel = {
       entity,
       criteria,
       goldCriteria,
       hasGold: goldCriteria.length > 0,
-      goldCompleted: goldCriteria.filter((criterion) => criterionProgress[criterion.id] === 'completed').length,
+      goldEarned: goldCriteria.length > 0 && goldCompleted === goldCriteria.length,
+      goldCompleted,
       goldTotal: goldCriteria.length,
       completed: completionCriterion ? criterionProgress[completionCriterion.id] === 'completed' : false,
       completedCriteria: criteria.filter((criterion) => criterionProgress[criterion.id] === 'completed').length,
