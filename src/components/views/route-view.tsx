@@ -27,7 +27,7 @@ export function RouteView({ catalog, current, onSelect }: { catalog: CanonicalCa
             const blocked = statuses.length > 0 && statuses.some((status) => status === 'blocked') && statuses.every((status) => status === 'completed' || status === 'blocked');
             return <article key={milestone.id} className={`route-row ${milestone.id === current.id ? 'current' : ''} ${mp.ratio === 1 ? 'done' : ''} ${blocked ? 'blocked' : ''}`} onClick={() => onSelect(milestone)}>
               <button className="route-check" onClick={(event) => { event.stopPropagation(); const status = mp.ratio === 1 ? 'not_started' : 'completed'; const criterionIds = tasks.flatMap((task) => task.criterionId ? [task.criterionId] : []); const taskIds = tasks.flatMap((task) => task.criterionId ? [] : [task.id]); void progress.setMilestoneStatus(milestone.id, criterionIds, taskIds, status); }}>{mp.ratio === 1 ? '✓' : blocked ? '×' : ''}</button>
-              <div><small>{milestone.kind.replaceAll('_', ' ')} · {milestone.sourceReference}</small><h3>{milestone.title}</h3>{milestone.missableRisk && <span className="risk-pill">PERDIBLE</span>}{blocked && <span className="blocked-pill">BLOQUEADO</span>}{milestone.metadata?.editorialInference && <span className="editorial-pill">ORDEN EDITORIAL</span>}</div>
+              <div><small>{milestone.kind.replaceAll('_', ' ')} · {milestone.sourceReference}</small><h3>{milestone.title}</h3>{milestone.missableRisk && <span className="risk-pill">PERDIBLE</span>}{blocked && <span className="blocked-pill">BLOQUEADO</span>}{Boolean(milestone.metadata?.editorialInference) && <span className="editorial-pill">ORDEN EDITORIAL</span>}</div>
               <strong>{mp.completed}/{mp.total}</strong>
             </article>;
           })}
