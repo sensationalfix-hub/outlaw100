@@ -9,6 +9,7 @@ import { EntityGridView } from '@/components/views/entity-grid-view';
 import { ArchiveView } from '@/components/views/archive-view';
 import { CraftingView } from '@/components/views/crafting-view';
 import { MapView } from '@/components/views/map-view';
+import { StoryView } from '@/components/views/story-view';
 import type { SearchHit } from '@/features/search/model';
 import { ProgressProvider, useProgress } from '@/features/progress/progress-context';
 import { getRecommendedMilestone } from '@/features/route/engine';
@@ -70,6 +71,7 @@ function LoadedApp() {
     if (!catalog || !selected) return null;
     if (view === 'dashboard') return <DashboardView catalog={catalog} milestone={selected} onOpenRoute={() => setView('route')} onOpenEntity={openEntity} onOpenMap={() => setView('map')} onSelectMilestone={openMilestone} />;
     if (view === 'route') return <RouteView catalog={catalog} current={selected} onSelect={openMilestone} />;
+    if (view === 'story') return <StoryView catalog={catalog} selectedEntityId={selectedEntityId} onOpenMap={openMapForEntity} onOpenEntity={openEntity} />;
     if (view === 'archive') return <ArchiveView catalog={catalog} selectedEntityId={selectedEntityId} onOpenMap={openMapForEntity} onOpenEntity={openEntity} />;
     if (view === 'crafting') return <CraftingView catalog={catalog} />;
     if (view === 'requests') return <RouteView catalog={{ ...catalog, milestones: catalog.milestones.filter((m) => m.kind === 'item_request') }} current={selected} onSelect={openMilestone} />;
