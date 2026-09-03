@@ -4,6 +4,7 @@ const CACHE_CONTROL = 'public, max-age=86400, s-maxage=604800, stale-while-reval
 const MAX_REDIRECTS = 3;
 
 // Serve trusted remote artwork from the OUTLAW100 origin so browsers never hotlink it directly.
+// The response marker also lets production checks prove this route, rather than an older deployment, is live.
 async function fetchAllowedImage(source: string): Promise<Response> {
   let current = source;
 
@@ -42,6 +43,7 @@ async function fetchAllowedImage(source: string): Promise<Response> {
         'Content-Type': contentType,
         'Cache-Control': CACHE_CONTROL,
         'X-Content-Type-Options': 'nosniff',
+        'X-Outlaw-Media-Proxy': '1',
       },
     });
   }
