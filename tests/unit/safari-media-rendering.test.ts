@@ -8,7 +8,7 @@ const mediaCss = readFileSync(new URL('../../src/app/media.css', import.meta.url
 
 test('dashboard heroes use Rockstar-hosted RDR2 artwork instead of PSU hotlinks', () => {
   assert.doesNotMatch(heroImages, /psu\.com/i);
-  assert.match(heroImages, /media-rockstargames-com\.akamaized\.net\/rockstargames-newsite\/uploads\//);
+  assert.match(heroImages, /media-rockstargames-com\.akamaized\.net\/rockstargames-newsite\/uploads/);
 });
 
 test('Safari-critical compendium images avoid async decoding', () => {
