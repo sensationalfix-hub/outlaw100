@@ -29,7 +29,7 @@ test('dashboard assigns a stable official Rockstar hero and rotates it between a
   const second = buildDashboardModel(catalog, catalog.milestones[1], progress) as ReturnType<typeof buildDashboardModel> & { curatedHeroImageUrl?: string };
 
   assert.equal(typeof first.curatedHeroImageUrl, 'string');
-  assert.match(first.curatedHeroImageUrl ?? '', /^https:\/\/media-rockstargames-com\.akamaized\.net\/rockstargames-newsite\/uploads\/[a-f0-9]+\.jpg$/);
+  assert.match(first.curatedHeroImageUrl ?? '', /^https:\/\/media\.rockstargames\.com\/rockstargames-newsite\/uploads\/[a-f0-9]+\.jpg$/);
   assert.equal(first.curatedHeroImageUrl, firstAgain.curatedHeroImageUrl);
   assert.notEqual(first.curatedHeroImageUrl, second.curatedHeroImageUrl);
 });
