@@ -39,8 +39,34 @@ test('cigarette card media resolves deterministic high-resolution GTABase artwor
   assert.equal(media.fit, 'contain');
 });
 
+test('regular fauna resolves an individual GTABase animal thumbnail', () => {
+  const media = resolveEntityMedia(entity('animal-robin', 'American Robin', 'animal'), []);
+  assert.equal(media.url, 'https://www.gtabase.com/images/red-dead-redemption-2/animals/resized/american-robin_320x177.jpg');
+  assert.equal(media.fit, 'contain');
+});
+
+test('legendary fish uses the GTABase species-legendary filename convention', () => {
+  const media = resolveEntityMedia(entity('fish-bluegill', 'Legendary Bluegill', 'fish'), []);
+  assert.equal(media.url, 'https://www.gtabase.com/images/red-dead-redemption-2/animals/resized/bluegill-legendary_320x177.jpg');
+});
+
+test('known source typos are normalized to the actual GTABase media slug', () => {
+  const smallGator = resolveEntityMedia(entity('animal-small-gator', 'American Allitgator (Small)', 'animal'), []);
+  const ram = resolveEntityMedia(entity('animal-ram', 'Legendary Big Horn Ram', 'animal'), []);
+  assert.equal(smallGator.url, 'https://www.gtabase.com/images/red-dead-redemption-2/animals/resized/american-alligator-small_320x177.jpg');
+  assert.equal(ram.url, 'https://www.gtabase.com/images/red-dead-redemption-2/animals/resized/legendary-bighorn-ram_320x177.jpg');
+});
+
+test('horse breeds get individual official-game imagery instead of the generic fallback', () => {
+  const arabian = resolveEntityMedia(entity('horse-arabian', 'Arabian', 'horse'), []);
+  const paint = resolveEntityMedia(entity('horse-paint', 'American Paint', 'horse'), []);
+  assert.match(arabian.url ?? '', /RDR2_Horses_ArabianHorse_WhiteArabianHorse_1-3139-360\.jpg$/);
+  assert.match(paint.url ?? '', /RDR2_CigaretteCards_Horses_AmericanPaintHorse-3421-1920\.jpg$/);
+  assert.notEqual(arabian.url, paint.url);
+});
+
 test('missing compendium art gets a deliberate local fallback instead of a broken image', () => {
-  const media = resolveEntityMedia(entity('animal-x', 'Unknown Animal', 'animal'), []);
+  const media = resolveEntityMedia(entity('unknown-x', 'Unknown Thing', 'unknown_category'), []);
   assert.ok(media);
   assert.match(media.url ?? '', /^\/media\//);
   assert.equal(media.source, 'fallback');
