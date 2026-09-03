@@ -2,7 +2,7 @@ name: verify
 
 on:
   push:
-    branches: [main]
+    branches: [main, fix/media-proxy-rockstar]
   workflow_dispatch:
 
 permissions:
