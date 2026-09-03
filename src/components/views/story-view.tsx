@@ -83,7 +83,7 @@ export function StoryView({
                   const isActive = active?.entity.id === mission.entity.id;
                   const allDone = mission.completed;
                   return <button key={mission.entity.id} className={`story-mission-card ${mission.goldEarned ? 'gold-mission' : ''} ${isActive ? 'selected' : ''} ${allDone ? 'done' : ''}`} onClick={() => setSelectedId(mission.entity.id)}>
-                    <div className="story-mission-top"><span>{String(mission.order).padStart(2, '0')}</span><small>{mission.completedCriteria}/{mission.totalCriteria}</small></div>
+                    <div className="story-mission-top"><span>{String(mission.campaignOrder).padStart(3, '0')}</span><small>{mission.completedCriteria}/{mission.totalCriteria}</small></div>
                     <h3>{catalog.translations?.[mission.entity.name] ?? mission.entity.name}</h3>
                     {catalog.translations?.[mission.entity.name] && <p>{mission.entity.name}</p>}
                     <footer>{mission.hasGold ? (mission.goldEarned ? <span className="story-gold-badge">★ MEDALLA DE ORO · {mission.goldCompleted}/{mission.goldTotal}</span> : <span>☆ RETOS DE ORO · {mission.goldCompleted}/{mission.goldTotal}</span>) : <span>{allDone ? 'COMPLETADA' : 'MISIÓN DE HISTORIA'}</span>}</footer>
@@ -105,7 +105,7 @@ export function StoryView({
           <p>{String(active.entity.metadata?.description ?? active.entity.metadata?.hint ?? 'Misión de historia preservada del catálogo canónico de OUTLAW100.')}</p>
           <div className="detail-meta">
             <div><small>TIPO</small><b>{active.entity.type}</b></div>
-            <div><small>ORDEN</small><b>{active.order}</b></div>
+            <div><small>ORDEN</small><b>{String(active.campaignOrder).padStart(3, '0')}</b></div>
             <div><small>CHECKS</small><b>{active.completedCriteria}/{active.totalCriteria}</b></div>
             {active.hasGold && <div className="story-gold-meta"><small>MEDALLA</small><b>{active.goldCompleted}/{active.goldTotal}</b></div>}
             {detail?.metadata.map((item) => <div key={`${item.label}:${item.value}`}><small>{item.label}</small><b>{item.value}</b></div>)}

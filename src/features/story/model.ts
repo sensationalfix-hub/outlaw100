@@ -12,6 +12,7 @@ export type StoryMissionModel = {
   completedCriteria: number;
   totalCriteria: number;
   order: number;
+  campaignOrder: number;
 };
 
 export type StoryChapterGroup = {
@@ -80,13 +81,20 @@ export function buildStoryGroups(
       completedCriteria: criteria.filter((criterion) => criterionProgress[criterion.id] === 'completed').length,
       totalCriteria: criteria.length,
       order: missionOrder,
+      campaignOrder: 0,
     };
     const current = grouped.get(label);
     if (current) current.missions.push(mission);
     else grouped.set(label, { label, order: groupOrder, missions: [mission] });
   }
 
-  return [...grouped.values()]
+  const sortedGroups = [...grouped.values()]
     .map((group) => ({ ...group, missions: [...group.missions].sort((a, b) => a.order - b.order || a.entity.name.localeCompare(b.entity.name, 'es')) }))
     .sort((a, b) => a.order - b.order || a.label.localeCompare(b.label, 'es'));
+
+  let campaignOrder = 0;
+  return sortedGroups.map((group) => ({
+    ...group,
+    missions: group.missions.map((mission) => ({ ...mission, campaignOrder: ++campaignOrder })),
+  }));
 }
