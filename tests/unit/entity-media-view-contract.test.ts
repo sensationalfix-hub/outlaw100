@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 
 const view = readFileSync(new URL('../../src/components/views/entity-grid-view.tsx', import.meta.url), 'utf8');
-const css = readFileSync(new URL('../../src/app/globals.css', import.meta.url), 'utf8');
+const css = readFileSync(new URL('../../src/app/media.css', import.meta.url), 'utf8');
 
 test('entity grid renders resolved media with orientation, fit and remote-image safeguards', () => {
   assert.match(view, /resolveEntityMedia/);
