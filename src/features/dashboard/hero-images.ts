@@ -1,8 +1,10 @@
-const ROCKSTAR_MEDIA_ROOT = 'https://media-rockstargames-com.akamaized.net/rockstargames-newsite/uploads';
+import { mediaUrlForBrowser } from '../media/browser-url.ts';
+
+const ROCKSTAR_MEDIA_ROOT = 'https://media.rockstargames.com/rockstargames-newsite/uploads';
 
 // Official Red Dead Redemption 2 screenshots published by Rockstar Games.
 // Keep the URLs explicit and deterministic: the dashboard should feel authored,
-// not like a random wallpaper carousel, and must not depend on third-party hotlinks.
+// not like a random wallpaper carousel, and the browser should never hotlink them directly.
 const ROCKSTAR_RDR2 = {
   forestRide: `${ROCKSTAR_MEDIA_ROOT}/d00445b4a48b2c0a2aa8beb8d6e0c9ff74e01ec6.jpg`,
   frontier: `${ROCKSTAR_MEDIA_ROOT}/fb251063185633d076705addacb36d6bbf9e8d7e.jpg`,
@@ -28,10 +30,14 @@ export const DASHBOARD_HERO_POOLS: Record<string, readonly string[]> = {
 
 const DEFAULT_POOL = DASHBOARD_HERO_POOLS['chapter-2'];
 
-export function getCuratedDashboardHero(chapter: string, chapterIndex: number): string {
+function rawCuratedDashboardHero(chapter: string, chapterIndex: number): string {
   const pool = DASHBOARD_HERO_POOLS[chapter] ?? DEFAULT_POOL;
   const safeIndex = Number.isFinite(chapterIndex) && chapterIndex >= 0 ? Math.floor(chapterIndex) : 0;
   return pool[safeIndex % pool.length] ?? DEFAULT_POOL[0];
+}
+
+export function getCuratedDashboardHero(chapter: string, chapterIndex: number): string {
+  return mediaUrlForBrowser(rawCuratedDashboardHero(chapter, chapterIndex));
 }
 
 export function getNextCuratedDashboardHero(chapter: string, chapterIndex: number): string {
