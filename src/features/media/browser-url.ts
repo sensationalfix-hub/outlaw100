@@ -1,5 +1,6 @@
 const PROXIED_MEDIA_HOSTS = new Set([
   'media.rockstargames.com',
+  'media-rockstargames-com.akamaized.net',
   'www.gtabase.com',
   'gtabase.com',
   'raw.githubusercontent.com',
