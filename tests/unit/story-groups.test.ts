@@ -78,6 +78,23 @@ test('Historia uses canonical campaign order even when legacy groupIndex metadat
   ]);
 });
 
+test('Historia gives every mission one stable global campaign number across chapter boundaries', () => {
+  const catalog: CanonicalCatalog = {
+    ...storyCatalog(),
+    entities: [
+      mission('c2-2', 'Chapter 2 second', 'Capítulo 2 · Mirador de la Herradura', 5, 20),
+      mission('c1-2', 'Chapter 1 second', 'Capítulo 1 · Colter', 1, 90),
+      mission('c2-1', 'Chapter 2 first', 'Capítulo 2 · Mirador de la Herradura', 5, 10),
+      mission('c1-1', 'Chapter 1 first', 'Capítulo 1 · Colter', 1, 80),
+    ],
+    criteria: [],
+  };
+  const groups = buildStoryGroups(catalog, {});
+  const missions = groups.flatMap((group) => group.missions);
+  assert.deepEqual(missions.map((item) => item.entity.id), ['c1-1', 'c1-2', 'c2-1', 'c2-2']);
+  assert.deepEqual(missions.map((item) => item.campaignOrder), [1, 2, 3, 4]);
+});
+
 test('Historia exposes gold state only when a mission has gold-* criteria', () => {
   const [colter] = buildStoryGroups(storyCatalog(), { 'c1-gold-a': 'completed' });
   const [plain, medal] = colter.missions;
