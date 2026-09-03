@@ -3,6 +3,7 @@ import { isAllowedMediaSource } from '@/features/media/browser-url';
 const CACHE_CONTROL = 'public, max-age=86400, s-maxage=604800, stale-while-revalidate=2592000';
 const MAX_REDIRECTS = 3;
 
+// Serve trusted remote artwork from the OUTLAW100 origin so browsers never hotlink it directly.
 async function fetchAllowedImage(source: string): Promise<Response> {
   let current = source;
 
