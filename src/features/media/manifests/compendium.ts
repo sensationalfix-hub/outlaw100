@@ -1,18 +1,11 @@
 import type { CatalogEntity } from '../../../lib/catalog/types.ts';
 import type { ManifestMediaEntry } from '../types.ts';
 import { cigaretteCardMedia } from './cigarette-cards.ts';
+import { equipmentMedia } from './equipment.ts';
 import { faunaMedia } from './fauna.ts';
 import { horseMedia } from './horses.ts';
+import { plantMedia } from './plants.ts';
 import { weaponMedia } from './weapons.ts';
-
-const EQUIPMENT_MEDIA: Record<string, ManifestMediaEntry> = {
-  Binoculars: { url: 'https://static.wikia.nocookie.net/reddeadredemption/images/4/40/RD2_Binoculars_Symbol.png/revision/latest', source: 'official-compendium', orientation: 'landscape', fit: 'contain' },
-  Camera: { url: 'https://static.wikia.nocookie.net/reddeadredemption/images/7/78/Camera_rdr2.png/revision/latest', source: 'official-compendium', orientation: 'landscape', fit: 'contain' },
-  'Fishing Rod': { url: 'https://static.wikia.nocookie.net/reddeadredemption/images/9/9f/RDR2_Fishing_rod_Compendium.png/revision/latest', source: 'official-compendium', orientation: 'landscape', fit: 'contain' },
-  Lantern: { url: 'https://static.wikia.nocookie.net/reddeadredemption/images/b/b0/Rdr2_lantern_symbol.png/revision/latest', source: 'official-compendium', orientation: 'square', fit: 'contain' },
-  'Electric Lantern': { url: 'https://static.wikia.nocookie.net/reddeadredemption/images/b/b0/Rdr2_lantern_symbol.png/revision/latest', source: 'official-compendium', orientation: 'square', fit: 'contain' },
-  Lasso: { url: 'https://www.gtabase.com/images/red-dead-redemption-2/weapons/icon/lasso.jpg', source: 'official-compendium', orientation: 'landscape', fit: 'contain' },
-};
 
 const KNOWN_COMPENDIUM_MEDIA: Record<string, ManifestMediaEntry> = {
   'American Alligator': { url: 'https://www.gtabase.com/igallery/2501-2600/RDR2_Wildlife_American_Alligator-2548-1600.jpg', source: 'official-compendium', orientation: 'landscape', fit: 'contain' },
@@ -31,9 +24,10 @@ export function manifestMediaForEntity(entity: CatalogEntity): ManifestMediaEntr
   if (cigarette) return cigarette;
   if (entity.category === 'weapon') return weaponMedia(entity.name);
   if (entity.category === 'horse') return horseMedia(entity);
+  if (entity.category === 'plant') return plantMedia(entity.name);
   if (['animal', 'fish'].includes(entity.category)) return KNOWN_COMPENDIUM_MEDIA[entity.name] ?? faunaMedia(entity);
   if (['equipment', 'weapon_equipment', 'reinforced_equipment', 'horse_equipment', 'talisman_trinket'].includes(entity.category)) {
-    return EQUIPMENT_MEDIA[entity.name] ?? null;
+    return equipmentMedia(entity.name);
   }
   return KNOWN_COMPENDIUM_MEDIA[entity.name] ?? null;
 }
