@@ -4,6 +4,7 @@ import { useMemo, useState } from 'react';
 import { matchesEntityScope, normalizeSearch } from '@/features/search/model';
 import { buildEntityDetail } from '@/features/entities/detail-model';
 import { resolveEntityMedia } from '@/features/media/entity-media';
+import { mediaUrlForBrowser } from '@/features/media/browser-url';
 import type { EntityMedia } from '@/features/media/types';
 import { useProgress } from '@/features/progress/progress-context';
 import { ProgressStatusSelect } from '@/features/progress/status-control';
@@ -13,16 +14,15 @@ function ResolvedMediaImage({ media, className, alt }: { media: EntityMedia; cla
   if (!media.url) return null;
   return <img
     className={className}
-    src={media.url}
+    src={mediaUrlForBrowser(media.url)}
     alt={alt}
     loading="lazy"
     decoding="sync"
-    referrerPolicy="no-referrer"
     style={media.objectPosition ? { objectPosition: media.objectPosition } : undefined}
     onError={(event) => {
       if (media.fallbackUrl && event.currentTarget.dataset.fallbackUsed !== 'true') {
         event.currentTarget.dataset.fallbackUsed = 'true';
-        event.currentTarget.src = media.fallbackUrl;
+        event.currentTarget.src = mediaUrlForBrowser(media.fallbackUrl);
         return;
       }
       event.currentTarget.hidden = true;
