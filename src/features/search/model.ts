@@ -15,6 +15,14 @@ export type SearchHit = {
   milestoneId?: string;
 };
 
+const SOURCE_SUMMARY_ENTITY_NAMES = new Set([
+  'COMPLETE',
+  'INCOMPLETE',
+  'TOTAL',
+  'WEAPONS',
+  'REINFORCED EQUIPMENT',
+]);
+
 export function normalizeSearch(value: unknown): string {
   return String(value ?? '')
     .normalize('NFKD')
@@ -24,7 +32,12 @@ export function normalizeSearch(value: unknown): string {
     .trim();
 }
 
+export function isSourceSummaryEntity(entity: CatalogEntity): boolean {
+  return SOURCE_SUMMARY_ENTITY_NAMES.has(entity.name.trim().toUpperCase());
+}
+
 export function matchesEntityScope(entity: CatalogEntity, scope: EntityScope): boolean {
+  if (isSourceSummaryEntity(entity)) return false;
   if (!scope.categories.includes(entity.category)) return false;
   if (scope.legendary === undefined) return true;
   return Boolean(entity.metadata?.legendary) === scope.legendary;
@@ -59,6 +72,7 @@ export function searchCatalog(catalog: CanonicalCatalog, rawQuery: string, limit
 
   const hits: SearchHit[] = [];
   for (const entity of catalog.entities) {
+    if (isSourceSummaryEntity(entity)) continue;
     const translated = catalog.translations?.[entity.name] ?? '';
     const aliases = reverseAliases.get(normalizeSearch(entity.name)) ?? [];
     const primary = normalizeSearch(entity.name);
