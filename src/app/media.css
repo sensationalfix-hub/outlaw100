@@ -1,16 +1,24 @@
 /* Media-aware compendium cards. Artwork should remain identifiable, never be cropped into decorative mush. */
+/* Safari can corrupt remotely decoded JPEG/PNG layers when CSS filter is applied directly to the raster. */
+.dashboard-bg {
+  filter: none;
+  image-rendering: auto;
+}
+
 .entity-card-media.fit-contain {
   object-fit: contain;
   padding: 7px;
   background: radial-gradient(circle at 50% 42%, rgba(239,233,218,.055), rgba(7,6,5,.72) 72%);
-  filter: saturate(.82) contrast(1.04);
+  filter: none;
+  image-rendering: auto;
 }
 
 .detail-hero-image.fit-contain {
   object-fit: contain;
   padding: 12px 14px;
   background: radial-gradient(circle at 50% 45%, rgba(239,233,218,.06), rgba(7,6,5,.88) 76%);
-  filter: saturate(.86) contrast(1.04);
+  filter: none;
+  image-rendering: auto;
 }
 
 .entity-card.media-portrait .entity-card-media {
