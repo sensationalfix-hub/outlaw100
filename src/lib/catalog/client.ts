@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { applyCompendiumTranslations } from '@/features/localization/apply-translations';
 import { createSupabaseBrowserClient } from '@/lib/supabase/browser';
 import { loadCatalogFromSupabase } from './repository';
 import { loadCatalogWithFallback } from './load';
@@ -29,7 +30,7 @@ export function useCanonicalCatalog() {
           },
         });
         if (controller.signal.aborted) return;
-        setCatalog(result.catalog);
+        setCatalog(applyCompendiumTranslations(result.catalog));
         setSource(result.source);
         setError(null);
       } catch (cause) {
