@@ -127,9 +127,10 @@ test('base equipment resolves stable individual game inventory artwork', () => {
   }
 });
 
-test('missing compendium art gets a deliberate local fallback instead of a broken image', () => {
+test('missing compendium art stays visually empty instead of using a degraded global fallback', () => {
   const media = resolveEntityMedia(entity('unknown-x', 'Unknown Thing', 'unknown_category'), []);
   assert.ok(media);
-  assert.match(media.url ?? '', /^\/media\//);
+  assert.equal(media.url, null);
+  assert.equal(media.fallbackUrl, null);
   assert.equal(media.source, 'fallback');
 });
