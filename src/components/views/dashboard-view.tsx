@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { buildDashboardModel } from '@/features/dashboard/model';
 import { getNextCuratedDashboardHero } from '@/features/dashboard/hero-images';
 import { buildChapterGroups, chapterKey } from '@/features/dashboard/navigation';
+import { mediaUrlForBrowser } from '@/features/media/browser-url';
 import { getChapterProgress, isMilestoneCompleted, isMilestoneTaskCompleted } from '@/features/route/engine';
 import { useProgress } from '@/features/progress/progress-context';
 import type { CanonicalCatalog, CatalogMilestone, CatalogMilestoneTask } from '@/lib/catalog/types';
@@ -82,9 +83,8 @@ export function DashboardView({
   const relatedMarkers = catalog.mapMarkers
     .filter((marker) => marker.entityId && model.tasks.some((task) => task.entityId === marker.entityId))
     .slice(0, 10);
-  const fallbackImage = editorialChapter === 'chapter-1' ? '/media/outlaw-arthur.jpg' : '/media/outlaw-sunset.jpg';
-  const image = model.curatedHeroImageUrl;
-  const nextImage = getNextCuratedDashboardHero(milestone.chapter, currentIndex);
+  const image = mediaUrlForBrowser(model.curatedHeroImageUrl);
+  const nextImage = mediaUrlForBrowser(getNextCuratedDashboardHero(milestone.chapter, currentIndex));
   const milestoneDone = isMilestoneCompleted(milestone, catalog.milestoneTasks, progress.snapshot);
   const intel = milestone.metadata?.intel as { summary?: string } | undefined;
   const whyNow = String(milestone.metadata?.whyNow ?? intel?.summary ?? '');
@@ -98,7 +98,6 @@ export function DashboardView({
 
   useEffect(() => {
     const preload = new Image();
-    preload.referrerPolicy = 'no-referrer';
     preload.src = nextImage;
   }, [nextImage]);
 
@@ -209,7 +208,7 @@ export function DashboardView({
     </nav>
 
     <div className="dashboard-stage">
-      <img key={image} className="dashboard-bg" src={image} alt="" referrerPolicy="no-referrer" decoding="async" onError={(event) => { event.currentTarget.onerror = null; event.currentTarget.src = fallbackImage; }} />
+      <img key={image} className="dashboard-bg" src={image} alt="" decoding="sync" onError={(event) => { event.currentTarget.hidden = true; }} />
       <div className="dashboard-vignette" />
       <div className="dashboard-meta">
         <span className="chip red">{KIND_LABEL[milestone.kind] ?? milestone.kind}</span>
