@@ -2,8 +2,6 @@ import type { CatalogEntity, CatalogMediaAsset } from '../../lib/catalog/types.t
 import { manifestMediaForEntity } from './manifests/compendium.ts';
 import type { EntityMedia, EntityMediaFit, EntityMediaOrientation } from './types.ts';
 
-const LOCAL_FALLBACK = '/media/outlaw-sunset.jpg';
-
 const CONTAIN_CATEGORIES = new Set([
   'animal',
   'fish',
@@ -30,7 +28,7 @@ export function resolveEntityMedia(entity: CatalogEntity, mediaAssets: CatalogMe
     const presentation = inferCatalogPresentation(entity);
     return {
       url: catalogAsset.publicPath,
-      fallbackUrl: LOCAL_FALLBACK,
+      fallbackUrl: null,
       source: 'catalog',
       orientation: presentation.orientation,
       fit: presentation.fit,
@@ -41,7 +39,7 @@ export function resolveEntityMedia(entity: CatalogEntity, mediaAssets: CatalogMe
   if (manifest) {
     return {
       url: manifest.url,
-      fallbackUrl: LOCAL_FALLBACK,
+      fallbackUrl: null,
       source: manifest.source,
       orientation: manifest.orientation ?? 'unknown',
       fit: manifest.fit ?? 'cover',
@@ -50,7 +48,7 @@ export function resolveEntityMedia(entity: CatalogEntity, mediaAssets: CatalogMe
   }
 
   return {
-    url: LOCAL_FALLBACK,
+    url: null,
     fallbackUrl: null,
     source: 'fallback',
     orientation: 'landscape',
