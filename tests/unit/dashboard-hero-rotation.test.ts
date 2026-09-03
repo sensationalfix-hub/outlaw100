@@ -23,13 +23,13 @@ const catalog: CanonicalCatalog = {
 
 const progress: ProgressSnapshot = { version: 1, criteria: {}, tasks: {}, inventory: {} };
 
-test('dashboard assigns a stable high-resolution curated hero and rotates it between adjacent milestones', () => {
+test('dashboard assigns a stable official Rockstar hero and rotates it between adjacent milestones', () => {
   const first = buildDashboardModel(catalog, catalog.milestones[0], progress) as ReturnType<typeof buildDashboardModel> & { curatedHeroImageUrl?: string };
   const firstAgain = buildDashboardModel(catalog, catalog.milestones[0], progress) as ReturnType<typeof buildDashboardModel> & { curatedHeroImageUrl?: string };
   const second = buildDashboardModel(catalog, catalog.milestones[1], progress) as ReturnType<typeof buildDashboardModel> & { curatedHeroImageUrl?: string };
 
   assert.equal(typeof first.curatedHeroImageUrl, 'string');
-  assert.match(first.curatedHeroImageUrl ?? '', /^https:\/\/www\.psu\.com\/wp\/wp-content\/uploads\/2020\/09\/Red-Dead-Redemption-2-PS4-Wallpaper-/);
+  assert.match(first.curatedHeroImageUrl ?? '', /^https:\/\/media-rockstargames-com\.akamaized\.net\/rockstargames-newsite\/uploads\/[a-f0-9]+\.jpg$/);
   assert.equal(first.curatedHeroImageUrl, firstAgain.curatedHeroImageUrl);
   assert.notEqual(first.curatedHeroImageUrl, second.curatedHeroImageUrl);
 });
