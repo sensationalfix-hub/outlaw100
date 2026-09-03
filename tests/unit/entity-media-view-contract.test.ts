@@ -5,11 +5,12 @@ import { readFileSync } from 'node:fs';
 const view = readFileSync(new URL('../../src/components/views/entity-grid-view.tsx', import.meta.url), 'utf8');
 const css = readFileSync(new URL('../../src/app/media.css', import.meta.url), 'utf8');
 
-test('entity grid renders resolved media with orientation, fit and remote-image safeguards', () => {
+test('entity grid renders resolved media with orientation, fit and same-origin safeguards', () => {
   assert.match(view, /resolveEntityMedia/);
   assert.match(view, /media-\$\{media\.orientation\}/);
   assert.match(view, /fit-\$\{media\.fit\}/);
-  assert.match(view, /referrerPolicy="no-referrer"/);
+  assert.match(view, /mediaUrlForBrowser\(media\.url\)/);
+  assert.doesNotMatch(view, /referrerPolicy="no-referrer"/);
   assert.match(view, /onError=/);
 });
 
