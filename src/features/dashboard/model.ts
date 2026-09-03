@@ -2,6 +2,7 @@ import type { CanonicalCatalog, CatalogCriterion, CatalogEntity, CatalogMileston
 import type { ProgressSnapshot } from '../progress/types.ts';
 import { buildRecipeState } from '../crafting/model.ts';
 import { isMilestoneCompleted, isMilestoneTaskCompleted } from '../route/engine.ts';
+import { getCuratedDashboardHero } from './hero-images.ts';
 
 const STORY_CHAPTER_LABELS: Record<string, string> = {
   'chapter-1': 'Capítulo 1 · Colter',
@@ -140,6 +141,7 @@ export type DashboardModel = {
   nextMilestones: CatalogMilestone[];
   readyCraftables: DashboardReadyCraftable[];
   heroImageUrl: string | null;
+  curatedHeroImageUrl: string;
 };
 
 function storyOrdinal(catalog: CanonicalCatalog, milestone: CatalogMilestone): number {
@@ -238,6 +240,7 @@ export function buildDashboardModel(
   const sameChapter = catalog.milestones
     .filter((item) => String(item.metadata?.editorialChapter ?? item.chapter) === editorialChapter)
     .sort((a, b) => a.order - b.order);
+  const chapterIndex = Math.max(0, sameChapter.findIndex((item) => item.id === milestone.id));
   const pendingEarlierMilestones = sameChapter
     .filter((item) => item.order < milestone.order && !isMilestoneCompleted(item, catalog.milestoneTasks, progress))
     .slice(-4);
@@ -256,6 +259,7 @@ export function buildDashboardModel(
   }).slice(0, 5);
 
   const heroImageUrl = getMilestoneHeroImage(catalog, milestone, tasks, legacyMission);
+  const curatedHeroImageUrl = getCuratedDashboardHero(milestone.chapter, chapterIndex);
 
   return {
     milestone,
@@ -270,5 +274,6 @@ export function buildDashboardModel(
     nextMilestones,
     readyCraftables,
     heroImageUrl,
+    curatedHeroImageUrl,
   };
 }
