@@ -27,7 +27,8 @@ export function manifestMediaForEntity(entity: CatalogEntity): ManifestMediaEntr
   if (entity.category === 'plant') return plantMedia(entity.name);
   if (['animal', 'fish'].includes(entity.category)) return KNOWN_COMPENDIUM_MEDIA[entity.name] ?? faunaMedia(entity);
   if (['equipment', 'weapon_equipment', 'reinforced_equipment', 'horse_equipment', 'talisman_trinket'].includes(entity.category)) {
-    return equipmentMedia(entity.name);
+    const group = typeof entity.metadata?.group === 'string' ? entity.metadata.group : undefined;
+    return equipmentMedia(entity.name, entity.category, group);
   }
   return KNOWN_COMPENDIUM_MEDIA[entity.name] ?? null;
 }

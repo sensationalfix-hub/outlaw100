@@ -4,7 +4,7 @@ export type EntityMediaFit = 'cover' | 'contain';
 
 export type ManifestMediaEntry = {
   url: string;
-  source: Exclude<EntityMediaSource, 'catalog' | 'fallback'>;
+  source: Exclude<EntityMediaSource, 'catalog'>;
   orientation?: EntityMediaOrientation;
   fit?: EntityMediaFit;
   objectPosition?: string;
