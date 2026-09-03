@@ -16,7 +16,7 @@ function ResolvedMediaImage({ media, className, alt }: { media: EntityMedia; cla
     src={media.url}
     alt={alt}
     loading="lazy"
-    decoding="async"
+    decoding="sync"
     referrerPolicy="no-referrer"
     style={media.objectPosition ? { objectPosition: media.objectPosition } : undefined}
     onError={(event) => {
